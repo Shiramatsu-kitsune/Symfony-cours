@@ -1,0 +1,15 @@
+{% for article in articles %}
+<tr>
+    <td>{{ article.titre }}</td>
+    <td>{{ article.categorie }}</td>
+    <td>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('article_edit', {id: article.id}) }}">Modifier</a>
+            <form method="post" action="{{ path('article_delete', {id: article.id}) }}" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr ?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+                <button type="submit">Supprimer</button>
+            </form>
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}

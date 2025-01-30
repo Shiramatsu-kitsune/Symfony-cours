@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Modifier l'article</h1>
+<form method="post">
+    <label for="titre">Titre :</label>
+    <input type="text" name="titre" id="titre" value="{{ article.titre }}" required>
+
+    <label for="contenus">Contenus :</label>
+    <textarea name="contenus" id="contenus" required>{{ article.contenus }}</textarea>
+
+    <label for="image">Image :</label>
+    <input type="text" name="image" id="image" value="{{ article.image }}">
+
+    <label for="categorie">Catégorie :</label>
+    <input type="text" name="categorie" id="categorie" value="{{ article.categorie }}">
+
+    <button type="submit">Modifier</button>
+</form>
+<a href="{{ path('article_index') }}">Retour à la liste</a>
+{% endblock %}

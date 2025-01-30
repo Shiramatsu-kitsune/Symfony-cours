@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Créer un nouvel article</h1>
+<form method="post">
+    <label for="titre">Titre :</label>
+    <input type="text" name="titre" id="titre" required>
+
+    <label for="contenus">Contenus :</label>
+    <textarea name="contenus" id="contenus" required></textarea>
+
+    <label for="image">Image :</label>
+    <input type="text" name="image" id="image">
+
+    <label for="categorie">Catégorie :</label>
+    <input type="text" name="categorie" id="categorie">
+
+    <button type="submit">Créer</button>
+</form>
+<a href="{{ path('article_index') }}">Retour à la liste</a>
+{% endblock %}

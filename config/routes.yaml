@@ -27,3 +27,23 @@ user_delete:
     methods: [POST]
     requirements:
         id: '\d+'
+
+article_index:
+    path: /articles
+    controller: App\Controller\ArticleController::index
+
+article_new:
+    path: /articles/new
+    controller: App\Controller\ArticleController::new
+
+article_edit:
+    path: /articles/{id}/edit
+    controller: App\Controller\ArticleController::edit
+    requirements:
+        id: '\d+'
+
+article_delete:
+    path: /articles/{id}/delete
+    controller: App\Controller\ArticleController::delete
+    requirements:
+        id: '\d+'

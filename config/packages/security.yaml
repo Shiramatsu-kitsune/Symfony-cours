@@ -34,3 +34,11 @@ security:
         - { path: ^/user/new, roles: IS_AUTHENTICATED_ANONYMOUSLY } 
         - { path: ^/user/edit, roles: ROLE_ADMIN }
         - { path: ^/user, roles: ROLE_USER }
+
+        - { path: ^/articles$, roles: IS_AUTHENTICATED_ANONYMOUSLY } # Voir la liste
+        - { path: ^/articles/\d+$, roles: IS_AUTHENTICATED_ANONYMOUSLY } # Voir un article
+
+        # Les actions CRUD sont réservées aux administrateurs
+        - { path: ^/articles/new, roles: ROLE_ADMIN }
+        - { path: ^/articles/\d+/edit, roles: ROLE_ADMIN }
+        - { path: ^/articles/\d+/delete, roles: ROLE_ADMIN }
