@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un utilisateur{% endblock %}
+
+{% block body %}
+    <h1>Créer un utilisateur</h1>
+
+    <form method="post">
+        <label>Email :</label>
+        <input type="email" name="email" required>
+
+        <label>Mot de passe :</label>
+        <input type="password" name="password" required>
+
+        <label>Rôles :</label>
+        <select name="roles[]" multiple>
+            <option value="ROLE_USER">Utilisateur</option>
+            <option value="ROLE_ADMIN">Administrateur</option>
+        </select>
+
+        <button type="submit">Créer</button>
+    </form>
+
+    <a href="{{ path('user_index') }}">Retour</a>
+{% endblock %}
