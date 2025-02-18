@@ -25,31 +25,37 @@ class UserController extends AbstractController
 
      
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
-{
+    {
+        
+        if ($this->getUser() && in_array('ROLE_USER', $this->getUser()->getRoles(), true)) {
+            return $this->redirectToRoute('user_index');
+        }
     
-    if ($this->getUser()) {
-        return $this->redirectToRoute('user_index');
+        
+        dump($this->getUser()); 
+        exit; 
+    
+        if ($request->isMethod('POST')) {
+            $email = $request->request->get('email');
+            $password = $request->request->get('password');
+            $pseudonyme = $request->request->get('pseudonyme'); 
+            $roles = (array) $request->request->get('roles', []);
+    
+            $user = new User();
+            $user->setEmail($email);
+            $user->setPassword($passwordHasher->hashPassword($user, $password));
+            $user->setPseudonyme($pseudonyme); 
+            $user->setRoles($roles);
+    
+            $entityManager->persist($user);
+            $entityManager->flush();
+    
+            return $this->redirectToRoute('app_login');
+        }
+    
+        return $this->render('user/new.html.twig');
     }
-
-    if ($request->isMethod('POST')) {
-        $email = $request->request->get('email');
-        $password = $request->request->get('password');
-        $roles = (array) $request->request->get('roles', []);
-
-        $user = new User();
-        $user->setEmail($email);
-        $user->setPassword($passwordHasher->hashPassword($user, $password));
-        $user->setRoles($roles);
-
-        $entityManager->persist($user);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('app_login'); 
-    }
-
-    return $this->render('user/new.html.twig');
-}
-
+    
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         if ($request->isMethod('POST')) {

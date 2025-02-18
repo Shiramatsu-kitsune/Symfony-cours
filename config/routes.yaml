@@ -8,6 +8,7 @@ controllers:
 app_login:
     path: /login
     controller: App\Controller\SecurityController::login
+    methods: [GET, POST]
 
 user_index:
     path: /user
