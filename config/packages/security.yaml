@@ -31,12 +31,13 @@ security:
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/logout, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/user/new, roles: IS_AUTHENTICATED_ANONYMOUSLY } 
+        - { path: ^/user/new, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+ 
         - { path: ^/user/edit, roles: ROLE_ADMIN }
         - { path: ^/user, roles: ROLE_USER }
 
-        - { path: ^/articles$, roles: IS_AUTHENTICATED_ANONYMOUSLY } # Voir la liste
-        - { path: ^/articles/\d+$, roles: IS_AUTHENTICATED_ANONYMOUSLY } # Voir un article
+        - { path: ^/articles$, roles: IS_AUTHENTICATED_ANONYMOUSLY } 
+        - { path: ^/articles/\d+$, roles: IS_AUTHENTICATED_ANONYMOUSLY } 
 
         # Les actions CRUD sont réservées aux administrateurs
         - { path: ^/articles/new, roles: ROLE_ADMIN }

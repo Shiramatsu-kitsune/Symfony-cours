@@ -4,6 +4,11 @@ controllers:
         namespace: App\Controller
     type: attribute
 
+
+app_login:
+    path: /login
+    controller: App\Controller\SecurityController::login
+
 user_index:
     path: /user
     controller: App\Controller\UserController::index

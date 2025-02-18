@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 
 namespace App\Controller;
 
@@ -55,8 +55,8 @@ class UserController extends AbstractController
         if ($request->isMethod('POST')) {
             $email = $request->request->get('email');
             $password = $request->request->get('password');
-            $roles = (array) $request->request->get('roles', []); // Convertir en tableau
-
+            $roles = (array) $request->request->get('roles', []); 
+            
             $user->setEmail($email);
             if (!empty($password)) {
                 $user->setPassword($passwordHasher->hashPassword($user, $password));
