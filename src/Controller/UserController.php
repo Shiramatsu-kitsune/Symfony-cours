@@ -27,13 +27,9 @@ class UserController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         
-        if ($this->getUser() && in_array('ROLE_USER', $this->getUser()->getRoles(), true)) {
+        if ($this->getUser()) {
             return $this->redirectToRoute('user_index');
         }
-    
-        
-        dump($this->getUser()); 
-        exit; 
     
         if ($request->isMethod('POST')) {
             $email = $request->request->get('email');

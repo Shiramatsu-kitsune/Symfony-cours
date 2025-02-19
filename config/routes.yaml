@@ -4,6 +4,10 @@ controllers:
         namespace: App\Controller
     type: attribute
 
+home:
+    path: /
+    controller: App\Controller\UserController::new
+    methods: [GET, POST]
 
 app_login:
     path: /login
@@ -37,19 +41,23 @@ user_delete:
 article_index:
     path: /articles
     controller: App\Controller\ArticleController::index
+    methods: [GET]
 
 article_new:
     path: /articles/new
     controller: App\Controller\ArticleController::new
+    methods: [GET, POST]
 
 article_edit:
     path: /articles/{id}/edit
     controller: App\Controller\ArticleController::edit
+    methods: [GET, POST]
     requirements:
         id: '\d+'
 
 article_delete:
     path: /articles/{id}/delete
     controller: App\Controller\ArticleController::delete
+    methods: [POST]
     requirements:
         id: '\d+'

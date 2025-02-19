@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
 {
-    #[Route('/articles', name: 'article_index', methods: ['GET'])]
+    
     public function index(ArticleRepository $articleRepository): Response
     {
         $articles = $articleRepository->findAll();
@@ -23,7 +23,7 @@ class ArticleController extends AbstractController
         ]);
     }
 
-    #[Route('/articles/new', name: 'article_new', methods: ['GET', 'POST'])]
+   
 public function new(Request $request, EntityManagerInterface $entityManager): Response
 {
     // Vérifier si l'utilisateur est admin
@@ -53,7 +53,7 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
     return $this->render('article/new.html.twig');
 }
 
-#[Route('/articles/{id}/edit', name: 'article_edit', methods: ['GET', 'POST'])]
+
 public function edit(Request $request, Article $article, EntityManagerInterface $entityManager): Response
 {
     // Vérifier si l'utilisateur est admin
@@ -83,7 +83,7 @@ public function edit(Request $request, Article $article, EntityManagerInterface 
 }
 
 
-#[Route('/articles/{id}/delete', name: 'article_delete', methods: ['POST'])]
+
 public function delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
 {
     // Vérifier si l'utilisateur est admin
