@@ -4,10 +4,19 @@ controllers:
         namespace: App\Controller
     type: attribute
 
+
+favicon:
+    path: /favicon.ico
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirect
+    defaults:
+        path: /images/favicon.ico
+        permanent: true
+
 home:
     path: /
-    controller: App\Controller\UserController::new
-    methods: [GET, POST]
+    controller: App\Controller\HomeController::index
+    methods: [GET]
+
 
 app_login:
     path: /login

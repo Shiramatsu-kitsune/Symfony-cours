@@ -5,12 +5,9 @@ security:
                 class: App\Entity\User
                 property: email
 
-    password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-
     firewalls:
         dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            pattern: ^/(css|images|js)/
             security: false
 
         main:
@@ -19,29 +16,25 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login
-                default_target_path: /user
+                default_target_path: \
             logout:
                 path: app_logout
-                target: /
-
-
-    role_hierarchy:
-        ROLE_ADMIN: [ROLE_USER]
+                target: home
 
     access_control:
-
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/logout, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/user/new, roles: IS_AUTHENTICATED_ANONYMOUSLY }  # ✅ Ajoute ça si manquant
-
- 
+        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: ROLE_USER }
         - { path: ^/user/edit, roles: ROLE_ADMIN }
         - { path: ^/user, roles: ROLE_USER }
-
-        - { path: ^/articles$, roles: IS_AUTHENTICATED_ANONYMOUSLY } 
-        - { path: ^/articles/\d+$, roles: IS_AUTHENTICATED_ANONYMOUSLY } 
-
-        # Les actions CRUD sont réservées aux administrateurs
+        
+        #Article
+        - { path: ^/articles$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/articles/\d+$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/articles/new, roles: ROLE_ADMIN }
         - { path: ^/articles/\d+/edit, roles: ROLE_ADMIN }
         - { path: ^/articles/\d+/delete, roles: ROLE_ADMIN }
+
+
+        #HomePage
+        - { path: '^/$', roles: IS_AUTHENTICATED_ANONYMOUSLY}
