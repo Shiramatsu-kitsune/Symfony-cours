@@ -11,9 +11,8 @@ favicon:
     defaults:
         path: /images/favicon.ico
         permanent: true
-
 home:
-    path: /
+    path: home
     controller: App\Controller\HomeController::index
     methods: [GET]
 

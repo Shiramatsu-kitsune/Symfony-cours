@@ -11,20 +11,25 @@ security:
             security: false
 
         main:
-            lazy: true
             provider: app_user_provider
+            entry_point: form_login  # Ajout du entry_point
             form_login:
                 login_path: app_login
                 check_path: app_login
-                default_target_path: \
+                default_target_path: home
             logout:
                 path: app_logout
                 target: home
+            custom_authenticator: App\Security\AppAuthenticator
+
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
 
     access_control:
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, roles: ROLE_USER }
+        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/user/edit, roles: ROLE_ADMIN }
         - { path: ^/user, roles: ROLE_USER }
         
