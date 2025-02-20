@@ -27,12 +27,6 @@ class UserController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         
-        if ($this->getUser()) {
-            dump('Utilisateur connecté, redirection vers user_index');
-            exit;
-            return $this->redirectToRoute('user_index');
-        }
-        
         if ($request->isMethod('POST')) {
             dump('Formulaire soumis');
             
