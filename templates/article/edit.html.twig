@@ -2,20 +2,38 @@
 
 {% block body %}
 <h1>Modifier l'article</h1>
-<form method="post">
+
+<form method="post" enctype="multipart/form-data">
     <label for="titre">Titre :</label>
     <input type="text" name="titre" id="titre" value="{{ article.titre }}" required>
 
-    <label for="contenus">Contenus :</label>
+    <label for="contenus">Contenu :</label>
     <textarea name="contenus" id="contenus" required>{{ article.contenus }}</textarea>
 
-    <label for="image">Image :</label>
-    <input type="text" name="image" id="image" value="{{ article.image }}">
+    <label for="image">Image actuelle :</label>
+    {% if article.image %}
+        <div>
+            <img src="{{ asset('uploads/images/' ~ article.image) }}" alt="Image de l'article" width="150">
+        </div>
+    {% else %}
+        <p>Aucune image</p>
+    {% endif %}
+
+    <label for="image">Nouvelle image :</label>
+    <input type="file" name="image" id="image" accept="image/jpeg, image/jpg, image/png">
 
     <label for="categorie">Catégorie :</label>
-    <input type="text" name="categorie" id="categorie" value="{{ article.categorie }}">
+    <select name="categorie" id="categorie" required>
+        <option value="">-- Sélectionner une catégorie --</option>
+        {% for cat in categories %}
+            <option value="{{ cat.id }}" {% if article.categorie.id == cat.id %}selected{% endif %}>
+                {{ cat.nom }}
+            </option>
+        {% endfor %}
+    </select>
 
     <button type="submit">Modifier</button>
 </form>
+
 <a href="{{ path('article_index') }}">Retour à la liste</a>
 {% endblock %}
