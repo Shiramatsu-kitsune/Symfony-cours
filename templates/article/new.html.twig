@@ -2,20 +2,27 @@
 
 {% block body %}
 <h1>Créer un nouvel article</h1>
-<form method="post">
+
+<form method="post" enctype="multipart/form-data">
     <label for="titre">Titre :</label>
     <input type="text" name="titre" id="titre" required>
 
-    <label for="contenus">Contenus :</label>
+    <label for="contenus">Contenu :</label>
     <textarea name="contenus" id="contenus" required></textarea>
 
     <label for="image">Image :</label>
-    <input type="text" name="image" id="image">
+    <input type="file" name="image" id="image" accept="image/jpeg, image/jpg, image/png" required>
 
     <label for="categorie">Catégorie :</label>
-    <input type="text" name="categorie" id="categorie">
+<select name="categorie" id="categorie" required>
+    <option value="">-- Sélectionner une catégorie --</option>
+    {% for cat in categories %}
+        <option value="{{ cat.id }}">{{ cat.nom }}</option>
+    {% endfor %}
+</select>
 
     <button type="submit">Créer</button>
 </form>
+
 <a href="{{ path('article_index') }}">Retour à la liste</a>
 {% endblock %}

@@ -23,14 +23,20 @@ class Article
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $categorie = null;
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Categorie $categorie;
+
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $publishedAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Categorie $no = null;
 
     public function getId(): ?int
     {
@@ -73,16 +79,18 @@ class Article
         return $this;
     }
 
-    public function getCategorie(): ?string
+    public function getCategorie(): ?Categorie
     {
+    
         return $this->categorie;
     }
 
-    public function setCategorie(string $categorie): static
+    public function setCategorie(Categorie $categorie): static
     {
-        $this->categorie = $categorie;
-
-        return $this;
+    $this->categorie = $categorie;
+    
+    return $this;
+    
     }
 
     public function getUpdatedAt(): ?\DateTimeImmutable
@@ -105,6 +113,18 @@ class Article
     public function setPublishedAt(\DateTimeImmutable $publishedAt): static
     {
         $this->publishedAt = $publishedAt;
+
+        return $this;
+    }
+
+    public function getNo(): ?Categorie
+    {
+        return $this->no;
+    }
+
+    public function setNo(?Categorie $no): static
+    {
+        $this->no = $no;
 
         return $this;
     }

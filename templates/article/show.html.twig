@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.titre }}{% endblock %}
+
+{% block body %}
+    <h1>{{ article.titre }}</h1>
+    <img src="{{ article.image }}" alt="{{ article.titre }}">
+    <p>{{ article.contenus }}</p>
+    <p><strong>Catégorie :</strong> {{ article.categorie }}</p>
+    <p><strong>Publié le :</strong> {{ article.publishedAt|date('d/m/Y H:i') }}</p>
+    <a href="{{ path('article_index') }}">Retour aux articles</a>
+{% endblock %}

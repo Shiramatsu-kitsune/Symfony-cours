@@ -27,34 +27,41 @@ class UserController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         
-        if ($this->getUser() && in_array('ROLE_USER', $this->getUser()->getRoles(), true)) {
-            return $this->redirectToRoute('user_index');
-        }
-    
-        
-        dump($this->getUser()); 
-        exit; 
-    
         if ($request->isMethod('POST')) {
+            dump('Formulaire soumis');
+            
             $email = $request->request->get('email');
             $password = $request->request->get('password');
             $pseudonyme = $request->request->get('pseudonyme'); 
-            $roles = (array) $request->request->get('roles', []);
-    
+            $roles = (array) $request->request->all('roles');
+        
+            dump($email, $password, $pseudonyme, $roles);
+        
+            if (!$pseudonyme) {
+                throw new \Exception("Le pseudonyme est obligatoire !");
+            }
+        
             $user = new User();
             $user->setEmail($email);
             $user->setPassword($passwordHasher->hashPassword($user, $password));
-            $user->setPseudonyme($pseudonyme); 
+            $user->setPseudonyme($pseudonyme);
+            $user->setUsername($pseudonyme);
             $user->setRoles($roles);
-    
+        
+            dump($user);
+        
             $entityManager->persist($user);
             $entityManager->flush();
-    
+        
+            dump('Redirection vers login');
+            exit;
+            
             return $this->redirectToRoute('app_login');
         }
-    
+        
         return $this->render('user/new.html.twig');
-    }
+        
+    }        
     
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
