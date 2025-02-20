@@ -1,9 +1,14 @@
 security:
+    password_hashers:
+        App\Entity\User:
+            algorithm: auto
+
     providers:
         app_user_provider:
             entity:
                 class: App\Entity\User
                 property: email
+
 
     firewalls:
         dev:
@@ -30,7 +35,7 @@ security:
     access_control:
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         #- { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/user/edit, roles: ROLE_ADMIN }
+        - { path: ^/user/edit, roles: ROLE_USER }
         - { path: ^/user, roles: ROLE_USER }
         
         #Article
