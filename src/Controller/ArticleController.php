@@ -31,13 +31,16 @@ class ArticleController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
     
+        // Récupérer toutes les catégories pour le menu déroulant
+        $categories = $categorieRepository->findAll();
+    
         if ($request->isMethod('POST')) {
             $titre = $request->request->get('titre');
             $contenus = $request->request->get('contenus');
-            $categorieId = $request->request->get('categorie');
+            $categorieId = $request->request->get('categorie'); // Récupère l'ID sélectionné
             $publishedAt = new \DateTimeImmutable();
     
-            // Récupérer la catégorie sélectionnée
+            // Vérifier si la catégorie existe
             $categorie = $categorieRepository->find($categorieId);
             if (!$categorie) {
                 $this->addFlash('error', 'Catégorie invalide.');
@@ -47,7 +50,7 @@ class ArticleController extends AbstractController
             $article = new Article();
             $article->setTitre($titre)
                 ->setContenus($contenus)
-                ->setCategorie($categorie)
+                ->setCategorie($categorie) // ✅ Maintenant, on enregistre un objet Categorie
                 ->setPublishedAt($publishedAt)
                 ->setUpdatedAt($publishedAt);
     
@@ -79,72 +82,76 @@ class ArticleController extends AbstractController
         }
     
         return $this->render('article/new.html.twig', [
-            'categories' => $categorieRepository->findAll(),
+            'categories' => $categories, // ✅ Passer les catégories à Twig
         ]);
     }
+    
 
     
     public function edit(Request $request, Article $article, EntityManagerInterface $entityManager, SluggerInterface $slugger, CategorieRepository $categorieRepository): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-    
-        if ($request->isMethod('POST')) {
-            $titre = $request->request->get('titre');
-            $contenus = $request->request->get('contenus');
-            $categorieId = $request->request->get('categorie');
-            $updatedAt = new \DateTimeImmutable();
-    
-            // Vérifier la catégorie
-            $categorie = $categorieRepository->find($categorieId);
-            if (!$categorie) {
-                $this->addFlash('error', 'Catégorie invalide.');
-                return $this->redirectToRoute('article_edit', ['id' => $article->getId()]);
-            }
-    
-            $article->setTitre($titre)
-                ->setContenus($contenus)
-                ->setCategorie($categorie)
-                ->setUpdatedAt($updatedAt);
-    
-            /** @var UploadedFile|null $imageFile */
-            $imageFile = $request->files->get('image');
-    
-            if ($imageFile) {
-                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
-    
-                try {
-                    $imageFile->move(
-                        $this->getParameter('images_directory'),
-                        $newFilename
-                    );
-    
-                    // Supprime l'ancienne image
-                    if ($article->getImage()) {
-                        $oldImagePath = $this->getParameter('images_directory') . '/' . $article->getImage();
-                        if (file_exists($oldImagePath)) {
-                            unlink($oldImagePath);
-                        }
-                    }
-    
-                    $article->setImage($newFilename);
-                } catch (FileException $e) {
-                    $this->addFlash('error', 'Erreur lors de l’upload du fichier.');
-                }
-            }
-    
-            $entityManager->flush();
-    
-            $this->addFlash('success', 'Article mis à jour avec succès !');
-            return $this->redirectToRoute('article_index');
+{
+    $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+    // Récupérer toutes les catégories depuis le repository
+    $categories = $categorieRepository->findAll();
+
+    if ($request->isMethod('POST')) {
+        $titre = $request->request->get('titre');
+        $contenus = $request->request->get('contenus');
+        $categorieId = $request->request->get('categorie');
+        $updatedAt = new \DateTimeImmutable();
+
+        // Vérifier si la catégorie existe
+        $categorie = $categorieRepository->find($categorieId);
+        if (!$categorie) {
+            $this->addFlash('error', 'Catégorie invalide.');
+            return $this->redirectToRoute('article_edit', ['id' => $article->getId()]);
         }
-    
-        return $this->render('article/edit.html.twig', [
-            'article' => $article,
-            'categories' => $categorieRepository->findAll(),
-        ]);
+
+        $article->setTitre($titre)
+            ->setContenus($contenus)
+            ->setCategorie($categorie)
+            ->setUpdatedAt($updatedAt);
+
+        /** @var UploadedFile|null $imageFile */
+        $imageFile = $request->files->get('image');
+
+        if ($imageFile) {
+            $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename = $slugger->slug($originalFilename);
+            $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
+
+            try {
+                $imageFile->move(
+                    $this->getParameter('images_directory'),
+                    $newFilename
+                );
+
+                // Supprime l'ancienne image si elle existe
+                if ($article->getImage()) {
+                    $oldImagePath = $this->getParameter('images_directory') . '/' . $article->getImage();
+                    if (file_exists($oldImagePath)) {
+                        unlink($oldImagePath);
+                    }
+                }
+
+                $article->setImage($newFilename);
+            } catch (FileException $e) {
+                $this->addFlash('error', 'Erreur lors de l’upload du fichier.');
+            }
+        }
+
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Article mis à jour avec succès !');
+        return $this->redirectToRoute('article_index');
     }
+
+    return $this->render('article/edit.html.twig', [
+        'article' => $article,
+        'categories' => $categories, // Passer les catégories à Twig
+    ]);
+}
 
     public function show(Article $article): Response
     {

@@ -14,12 +14,12 @@
     <input type="file" name="image" id="image" accept="image/jpeg, image/jpg, image/png" required>
 
     <label for="categorie">Catégorie :</label>
-    <select name="categorie" id="categorie" required>
-        <option value="">-- Sélectionner une catégorie --</option>
-        {% for cat in categories %}
-            <option value="{{ cat.id }}">{{ cat.nom }}</option>
-        {% endfor %}
-    </select>
+<select name="categorie" id="categorie" required>
+    <option value="">-- Sélectionner une catégorie --</option>
+    {% for cat in categories %}
+        <option value="{{ cat.id }}">{{ cat.nom }}</option>
+    {% endfor %}
+</select>
 
     <button type="submit">Créer</button>
 </form>
