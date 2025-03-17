@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Créer un nouveau poste</h1>
+
+<form method="post" enctype="multipart/form-data">
+    <label for="titre">Titre :</label>
+    <input type="text" name="titre" id="titre" required>
+
+    <label for="contenus">Contenu :</label>
+    <textarea name="contenus" id="contenus" required></textarea>
+
+    <label for="image">Image :</label>
+    <input type="file" name="image" id="image" accept="image/jpeg, image/png" required>
+
+    {{ poste.auteur.pseudonyme }}
+    <input type="hidden" name="auteur" value="{{ poste.auteur.id }}">
+    {% if poste.auteur == app.user %}
+        <input type="hidden" name="auteur" value="{{ app.user.id }}">
+    {% endif %}
+    
+    <button type="submit">Créer</button>
+</form>
+
+<a href="{{ path('poste_index') }}">Retour à la liste</a>
+{% endblock %}

@@ -3,6 +3,11 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\Article;
+use App\Entity\Poste;
+use App\Entity\Commentaire;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -31,6 +36,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $pseudonyme = null;
+
+    #[ORM\OneToMany(mappedBy: 'auteur', targetEntity: Article::class, cascade: ['remove'])]
+    private Collection $articles;
+
+    #[ORM\OneToMany(mappedBy: 'auteur', targetEntity: Poste::class, cascade: ['remove'])]
+    private Collection $postes;
+
+    #[ORM\OneToMany(mappedBy: 'auteur', targetEntity: Commentaire::class, cascade: ['remove'])]
+    private Collection $commentaires;
 
     public function getId(): ?int
     {
@@ -105,8 +119,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         
     }
 
+    public function __construct()
+    {
+    
+    $this->articles = new ArrayCollection();
+    $this->postes = new ArrayCollection();
+    $this->commentaires = new ArrayCollection();
+    
+    }
+
+
     public function getUserIdentifier(): string
     {
         return $this->email;
     }
+
+    public function getArticles(): Collection 
+    { 
+        return $this->articles;
+    }
+   
+    public function getPostes(): Collection 
+    { 
+        return $this->postes; 
+    }
+    
+    public function getCommentaires(): Collection 
+    { 
+        return $this->commentaires; 
+    }
+
 }

@@ -26,7 +26,7 @@ class ArticleController extends AbstractController
    
 public function new(Request $request, EntityManagerInterface $entityManager): Response
 {
-    // Vérifier si l'utilisateur est admin
+    // vérification si admin
     $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
     if ($request->isMethod('POST')) {
@@ -56,7 +56,7 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
 
 public function edit(Request $request, Article $article, EntityManagerInterface $entityManager): Response
 {
-    // Vérifier si l'utilisateur est admin
+
     $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
     if ($request->isMethod('POST')) {
@@ -86,7 +86,6 @@ public function edit(Request $request, Article $article, EntityManagerInterface 
 
 public function delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
 {
-    // Vérifier si l'utilisateur est admin
     $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
     if ($this->isCsrfTokenValid('delete' . $article->getId(), $request->request->get('_token'))) {

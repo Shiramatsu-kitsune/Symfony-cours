@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>{{ poste.titre }}</h1>
+
+{% if poste.image %}
+    <img src="{{ asset('uploads/images/' ~ poste.image) }}" alt="Image du poste" style="max-width: 600px; height: auto; margin-bottom: 20px;">
+{% endif %}
+
+
+<p><strong>Publié le :</strong> {{ poste.publishedAt|date('d/m/Y H:i') }}</p>
+<p><strong>Mis à jour :</strong> {{ poste.updatedAt|date('d/m/Y H:i') }}</p>
+
+<hr>
+
+<p>{{ poste.contenus }}</p>
+
+<hr>
+
+<a href="{{ path('poste_index') }}">⬅️ Retour à la liste</a>
+
+{% if app.user and (is_granted('ROLE_ADMIN') or poste.auteur == app.user) %}
+    | <a href="{{ path('poste_edit', {'id': poste.id}) }}">✏️ Modifier</a>
+
+    <form method="post" action="{{ path('poste_delete', {'id': poste.id}) }}" style="display:inline;" onsubmit="return confirm('Supprimer ce poste ?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ poste.id) }}">
+        <button type="submit" style="background:none; border:none; color:red; cursor:pointer;">🗑 Supprimer</button>
+    </form>
+{% endif %}
+{% endblock %}

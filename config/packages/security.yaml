@@ -32,7 +32,7 @@ security:
 
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/logout, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/user/new, roles: IS_AUTHENTICATED_ANONYMOUSLY }  # ✅ Ajoute ça si manquant
+        - { path: ^/user/new, roles: IS_AUTHENTICATED_ANONYMOUSLY }  
 
  
         - { path: ^/user/edit, roles: ROLE_ADMIN }
@@ -45,3 +45,16 @@ security:
         - { path: ^/articles/new, roles: ROLE_ADMIN }
         - { path: ^/articles/\d+/edit, roles: ROLE_ADMIN }
         - { path: ^/articles/\d+/delete, roles: ROLE_ADMIN }
+
+        #Post et commentaires
+        - {path: ^/poste/new, roles: ROLE_USER}
+        - {path: ^/poste/\d+/edit, roles: ROLE_USER}
+        - {path: ^/poste/\d+/delete, roles: ROLE_USER}
+        - {path: ^/commentaire/new, roles: ROLE_USER}
+        - {path: ^/commentaire/\d+/edit, roles: ROLE_USER}
+        - {path: ^/commentaire/\d+/delete, roles: ROLE_USER}
+
+
+        #Catégories
+        - {path: ^/categories/show, roles: ROLE_USER}
+        - {path: ^/categorie/index, roles: ROLE_ADMIN}

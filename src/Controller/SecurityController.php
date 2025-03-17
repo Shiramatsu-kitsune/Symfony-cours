@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 class SecurityController extends AbstractController
 
@@ -21,4 +23,9 @@ class SecurityController extends AbstractController
             'error' => $error,
         ]);
 }
+    #public function __construct(TokenStorageInterface $tokenStorageInterface, JWTTokenManagerInterface $jwtManager)
+    #{
+        #$this->jwtManager = $jwtManager;
+        #$this->tokenStorageInterface = $tokenStorageInterface;
+    #}
 }

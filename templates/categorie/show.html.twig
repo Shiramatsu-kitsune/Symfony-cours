@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Articles de la catégorie : {{ categorie.nom }}</h1>
+
+{% if articles|length > 0 %}
+    <ul>
+        {% for article in articles %}
+            <li>
+                <h2>{{ article.titre }}</h2>
+                <p>{{ article.contenus[:100] ~ '...' }}</p>
+                <a href="{{ path('article_show', {'id': article.id}) }}">Voir plus</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Aucun article dans cette catégorie.</p>
+{% endif %}
+
+<a href="{{ path('categorie_index') }}"> Retour aux catégories</a>
+{% endblock %}

@@ -61,3 +61,38 @@ article_delete:
     methods: [POST]
     requirements:
         id: '\d+'
+
+poste_index:
+    path: /poste
+    controller: App\Controller\PostController::index
+    methods: [GET]
+
+poste_show:
+    path: /poste/{id}
+    controller: App\Controller\PostController::show
+    methods: [GET]
+
+poste_new:
+    path: /poste/new
+    controller: App\Controller\PostController::new
+    methods: [GET, POST]
+
+poste_edit:
+    path: /poste/{id}/edit
+    controller: App\Controller\PostController::edit
+    methods: [GET, POST]
+
+poste_delete:
+    path: /poste/{id}/delete
+    controller: App\Controller\PostController::delete
+    methods: [POST]
+
+categorie_index:
+    path: /categorie
+    controller: App\Controller\CategorieController::index
+    methods: [GET]
+
+categorie_show:
+    path: /categorie/{id}
+    controller: App\Controller\CategorieController::show
+    methods: [GET]

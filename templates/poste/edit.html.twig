@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Modifier le poste</h1>
+
+<form method="post" enctype="multipart/form-data">
+    <label for="titre">Titre :</label>
+    <input type="text" name="titre" id="titre" value="{{ poste.titre }}" required>
+
+    <label for="contenus">Contenu :</label>
+    <textarea name="contenus" id="contenus" required>{{ poste.contenus }}</textarea>
+
+    <label>Image actuelle :</label>
+    {% if poste.image %}
+        <div><img src="{{ asset('uploads/images/' ~ poste.image) }}" alt="Image" width="200"></div>
+    {% else %}
+        <p>Aucune image</p>
+    {% endif %}
+
+    <label for="image">Nouvelle image :</label>
+    <input type="file" name="image" id="image" accept="image/jpeg, image/png">
+
+    <button type="submit">Modifier</button>
+</form>
+
+<a href="{{ path('poste_index') }}">Retour à la liste</a>
+{% endblock %}
