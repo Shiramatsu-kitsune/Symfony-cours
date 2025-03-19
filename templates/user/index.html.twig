@@ -3,31 +3,41 @@
 {% block title %}Liste des utilisateurs{% endblock %}
 
 {% block body %}
-    <h1>Liste des utilisateurs</h1>
-    <a href="{{ path('user_new') }}">Créer un utilisateur</a>
+<h1>Liste des utilisateurs</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Email</th>
-                <th>Rôles</th>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Pseudonyme</th>
+            <th>Rôles</th>
+            {% if is_granted('ROLE_ADMIN') %}
                 <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
         {% for user in users %}
             <tr>
+                <td>{{ user.id }}</td>
                 <td>{{ user.email }}</td>
+                <td>{{ user.pseudonyme }}</td>
                 <td>{{ user.roles|join(', ') }}</td>
-                <td>
-                    <a href="{{ path('user_edit', {id: user.id}) }}">Modifier</a>
-                    <form method="post" action="{{ path('user_delete', {id: user.id}) }}" onsubmit="return confirm('Êtes-vous sûr ?');">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-                        <button>Supprimer</button>
-                    </form>
-                </td>
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <td>
+                        <a href="{{ path('user_edit', {id: user.id}) }}">Modifier</a>
+
+                        <form method="post" action="{{ path('user_delete', {id: user.id}) }}" style="display:inline;" onsubmit="return confirm('Supprimer {{ user.pseudonyme }} ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                            <button type="submit">Supprimer</button>
+                        </form>
+                    </td>
+                {% endif %}
             </tr>
         {% endfor %}
-        </tbody>
-    </table>
+    </tbody>
+</table>
+
 {% endblock %}

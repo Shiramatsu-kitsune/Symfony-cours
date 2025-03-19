@@ -1,0 +1,73 @@
+/* Conteneur principal du formulaire */
+.form-container {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #BC4BC2;
+    border-radius: 4%;
+    box-shadow: 10px 10px 10px #EF27FF;
+    min-height: 50vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Conteneur de texte */
+.text-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.text-container h2 {
+    color: black;
+    font-weight: bolder;
+}
+
+/* Styles des champs de formulaire */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    width: 100%;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.form-group input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 100%;
+}
+
+/* Bouton de sauvegarde */
+.save-btn {
+    background-color: #5cb85c;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 15px;
+}
+
+.save-btn:hover {
+    background-color: #4cae4c;
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+    .form-container {
+        width: 90%;
+    }
+}

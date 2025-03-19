@@ -13,11 +13,7 @@
     <label for="image">Image :</label>
     <input type="file" name="image" id="image" accept="image/jpeg, image/png" required>
 
-    {{ poste.auteur.pseudonyme }}
-    <input type="hidden" name="auteur" value="{{ poste.auteur.id }}">
-    {% if poste.auteur == app.user %}
-        <input type="hidden" name="auteur" value="{{ app.user.id }}">
-    {% endif %}
+    <p>Auteur : {{ app.user.pseudonyme }}</p>
     
     <button type="submit">Créer</button>
 </form>

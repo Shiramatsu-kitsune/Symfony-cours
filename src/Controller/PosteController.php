@@ -26,55 +26,51 @@ class PosteController extends AbstractController
     public function new(
         Request $request,
         EntityManagerInterface $entityManager,
-        SluggerInterface $slugger,
-        CategorieRepository $categorieRepository
+        SluggerInterface $slugger
     ): Response {
         if ($request->isMethod('POST')) {
             $titre = $request->request->get('titre');
             $contenus = $request->request->get('contenus');
             $publishedAt = new \DateTimeImmutable();
-
+    
             $poste = new Poste();
             $poste->setTitre($titre)
                 ->setContenus($contenus)
                 ->setPublishedAt($publishedAt)
                 ->setUpdatedAt($publishedAt);
-
+    
+            // Gérer l'auteur → user connecté
+            $poste->setAuteur($this->getUser());
+    
             $imageFile = $request->files->get('image');
             if ($imageFile) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
-
+    
                 $imageFile->move($this->getParameter('images_directory'), $newFilename);
                 $poste->setImage($newFilename);
             }
-
+    
             $entityManager->persist($poste);
             $entityManager->flush();
-
+    
             $this->addFlash('success', 'Poste créé avec succès.');
             return $this->redirectToRoute('poste_index');
         }
-
+    
         return $this->render('poste/new.html.twig', [
-            'categories' => $categorieRepository->findAll(),
+            'poste' => new Poste(), // pour éviter les erreurs twig
         ]);
     }
-
-    public function show(Poste $poste): Response
-    {
-        return $this->render('poste/show.html.twig', [
-            'poste' => $poste,
-        ]);
-    }
+    
 
     
     public function edit(
         Request $request,
         Poste $poste,
         EntityManagerInterface $entityManager,
-        SluggerInterface $slugger,
+        SluggerInterface $slugger
     ): Response {
         if ($request->isMethod('POST')) {
             $poste->setTitre($request->request->get('titre'));

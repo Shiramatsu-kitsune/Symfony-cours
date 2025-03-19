@@ -12,6 +12,19 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% block body %}
+        {% if app.user and app.user.id == user.id %}
+    <form method="post" action="{{ path('user_delete', {id: user.id}) }}" onsubmit="return confirm('Confirmer la suppression ?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+        <button type="submit" class="btn btn-danger">Supprimer mon compte</button>
+    </form>
+{% elseif is_granted('ROLE_ADMIN') %}
+    <form method="post" action="{{ path('user_delete', {id: user.id}) }}" onsubmit="return confirm('Supprimer cet utilisateur ?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+        <button type="submit" class="btn btn-danger">Supprimer utilisateur</button>
+    </form>
+{% endif %}
+
+        {% endblock %}
     </body>
 </html>

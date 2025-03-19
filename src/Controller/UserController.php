@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 
   
@@ -23,67 +25,160 @@ class UserController extends AbstractController
         ]);
     }
 
-     
-    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
-    {
-        
+    
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $passwordHasher,
+        CsrfTokenManagerInterface $csrfTokenManager
+    ): Response {
         if ($this->getUser()) {
             return $this->redirectToRoute('user_index');
         }
     
+        $token = $csrfTokenManager->getToken('user_creation')->getValue();
+        $errors = [];
+    
         if ($request->isMethod('POST')) {
-            $email = $request->request->get('email');
+            $submittedToken = $request->request->get('_csrf_token');
+            if (!$csrfTokenManager->isTokenValid(new CsrfToken('user_creation', $submittedToken))) {
+                throw new \RuntimeException('Token CSRF invalide.');
+            }
+    
+            $email = trim($request->request->get('email'));
             $password = $request->request->get('password');
-            $pseudonyme = $request->request->get('pseudonyme'); 
-            $roles = (array) $request->request->get('roles', []);
+            $pseudonyme = trim($request->request->get('pseudonyme'));
     
-            $user = new User();
-            $user->setEmail($email);
-            $user->setPassword($passwordHasher->hashPassword($user, $password));
-            $user->setPseudonyme($pseudonyme); 
-            $user->setRoles($roles);
+            // Empêche les utilisateurs de définir leur rôle manuellement
+            $roles = ['ROLE_USER'];  // Par défaut
     
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Utilisateur créé avec succès !');
-            return $this->redirectToRoute('app_login');
+            // Si l'utilisateur est connecté ET admin → il peut définir les rôles
+            $currentUser = $this->getUser();
+            if ($currentUser && in_array('ROLE_ADMIN', $currentUser->getRoles(), true)) {
+                $roles = (array) $request->request->get('roles', ['ROLE_USER']);
+            }
+    
+            // Validation CNIL
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errors[] = 'Adresse email invalide.';
+            }
+    
+            if (empty($pseudonyme)) {
+                $errors[] = 'Le pseudonyme est obligatoire.';
+            }
+    
+            if (strlen($password) < 12) {
+                $errors[] = 'Le mot de passe doit contenir au moins 12 caractères.';
+            }
+            if (!preg_match('/[A-Z]/', $password)) {
+                $errors[] = 'Le mot de passe doit contenir au moins une lettre majuscule.';
+            }
+            if (!preg_match('/[a-z]/', $password)) {
+                $errors[] = 'Le mot de passe doit contenir au moins une lettre minuscule.';
+            }
+            if (!preg_match('/\d/', $password)) {
+                $errors[] = 'Le mot de passe doit contenir au moins un chiffre.';
+            }
+            if (!preg_match('/[\W_]/', $password)) {
+                $errors[] = 'Le mot de passe doit contenir au moins un caractère spécial.';
+            }
+    
+            if (count($errors) === 0) {
+                $user = new User();
+                $user->setEmail($email);
+                $user->setPassword($passwordHasher->hashPassword($user, $password));
+                $user->setPseudonyme($pseudonyme);
+                $user->setUsername($pseudonyme);
+                $user->setRoles($roles);
+    
+                $entityManager->persist($user);
+                $entityManager->flush();
+    
+                $this->addFlash('success', 'Utilisateur créé avec succès !');
+                return $this->redirectToRoute('app_login');
+            }
+    
+            return $this->render('user/new.html.twig', [
+                'errors' => $errors,
+                'email' => $email,
+                'pseudonyme' => $pseudonyme,
+                'roles' => $roles,
+                'csrf_token' => $token,
+            ]);
         }
     
-        return $this->render('user/new.html.twig');
+        return $this->render('user/new.html.twig', [
+            'csrf_token' => $token,
+        ]);
     }
     
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
-    {
+    
+
+
+    
+    public function edit(
+        Request $request,
+        User $user,
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $passwordHasher
+    ): Response {
         if ($request->isMethod('POST')) {
-            $email = $request->request->get('email');
+            $email = trim($request->request->get('email'));
             $password = $request->request->get('password');
-            $roles = (array) $request->request->get('roles', []); 
-            
+    
             $user->setEmail($email);
+    
             if (!empty($password)) {
                 $user->setPassword($passwordHasher->hashPassword($user, $password));
             }
-            $user->setRoles($roles); 
+    
+            // Rôle éditable seulement si admin
+            $currentUser = $this->getUser();
+            if ($currentUser && in_array('ROLE_ADMIN', $currentUser->getRoles(), true)) {
+                $roles = (array) $request->request->get('roles', []);
+                $user->setRoles($roles);
+            }
+    
             $entityManager->flush();
-
+    
+            $this->addFlash('success', 'Utilisateur mis à jour avec succès.');
             return $this->redirectToRoute('user_index');
         }
-
+    
         return $this->render('user/edit.html.twig', [
             'user' => $user,
         ]);
     }
+    
 
     
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+        $currentUser = $this->getUser();
+    
+        // Protection : Seul admin OU l’utilisateur lui-même peut supprimer le compte
+        if (
+            !$currentUser ||
+            (!$this->isGranted('ROLE_ADMIN') && $currentUser !== $user)
+        ) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
+    
+        // Vérification CSRF
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
             $entityManager->remove($user);
             $entityManager->flush();
+    
+            // Si l’utilisateur supprime lui-même son compte → déconnexion après suppression
+            if ($currentUser === $user) {
+                return $this->redirectToRoute('app_logout');
+            }
+    
+            $this->addFlash('success', 'Utilisateur supprimé.');
         }
-
+    
         return $this->redirectToRoute('user_index');
     }
+    
 
 }

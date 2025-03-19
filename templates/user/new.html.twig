@@ -3,26 +3,39 @@
 {% block title %}Créer un utilisateur{% endblock %}
 
 {% block body %}
-    <h1>Créer un utilisateur</h1>
+<form method="post">
+    <!-- Email -->
+    <label for="email">Email :</label>
+    <input type="email" name="email" id="email" value="{{ email ?? user.email ?? '' }}" required>
 
-    <form method="post">
-        <label>Email :</label>
-        <input type="email" name="email" required>
+    <!-- Pseudonyme -->
+    <label for="pseudonyme">Pseudonyme :</label>
+    <input type="text" name="pseudonyme" id="pseudonyme" value="{{ pseudonyme ?? user.pseudonyme ?? '' }}" required>
 
-        <label>Mot de passe :</label>
-        <input type="password" name="password" required>
+    <!-- Mot de passe -->
+    <label for="password">Mot de passe :</label>
+    <input type="password" name="password" id="password" required>
 
-        <label>Pseudonyme :</label>
-        <input type="text" name="pseudonyme" required> {# Ajout du champ pseudonyme #}
-
-        <label>Rôles :</label>
-        <select name="roles[]" multiple>
-            <option value="ROLE_USER">Utilisateur</option>
-            <option value="ROLE_ADMIN">Administrateur</option>
+    {% if is_granted('ROLE_ADMIN') %}
+        <!-- Rôles (uniquement visible pour ADMIN) -->
+        <label for="roles">Rôle :</label>
+        <select name="roles[]" id="roles" multiple required>
+            <option value="ROLE_USER" {% if 'ROLE_USER' in roles %}selected{% endif %}>Utilisateur</option>
+            <option value="ROLE_ADMIN" {% if 'ROLE_ADMIN' in roles %}selected{% endif %}>Administrateur</option>
         </select>
+    {% endif %}
 
-        <button type="submit">Créer</button>
-    </form>
+    <!-- CSRF -->
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('user_creation') }}">
 
-    <a href="{{ path('user_index') }}">Retour</a>
+    <button type="submit">Valider</button>
+
+    {% if errors is defined %}
+        <ul>
+            {% for error in errors %}
+                <li style="color:red">{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</form>
 {% endblock %}

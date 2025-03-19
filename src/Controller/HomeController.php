@@ -15,7 +15,11 @@ class HomeController extends AbstractController
 
     public function profile(): Response
     {
-        return $this->render('home/profile.html.twig');
+        $user = $this->getUser(); // ← C’est ici qu’on récupère l'utilisateur connecté
+    
+        return $this->render('home/profile.html.twig', [
+            'user' => $user, // ← On envoie la variable à Twig
+        ]);
     }
 
 

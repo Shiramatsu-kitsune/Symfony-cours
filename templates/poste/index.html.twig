@@ -16,13 +16,12 @@
 
             <p>{{ poste.contenus[:100] ~ '...' }}</p>
 
-            <p><strong>Catégorie :</strong> {{ poste.categorie.nom }}</p>
             <p><strong>Publié le :</strong> {{ poste.publishedAt|date('d/m/Y H:i') }}</p>
 
             <a href="{{ path('poste_show', {'id': poste.id}) }}">👁 Voir</a>
 
             {% if app.user and (is_granted('ROLE_ADMIN') or poste.auteur == app.user) %}
-                | <a href="{{ path('poste_edit', {'id': poste.id}) }}">✏️ Modifier</a>
+                | <a href="{{ path('poste_edit', {'id': poste.id}) }}"> Modifier</a>
 
                 <form method="post" action="{{ path('poste_delete', {'id': poste.id}) }}" style="display:inline;" onsubmit="return confirm('Confirmer la suppression ?');">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ poste.id) }}">
