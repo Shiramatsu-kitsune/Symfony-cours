@@ -16,7 +16,7 @@ class Commentaire
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
+    
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
     #[ORM\ManyToOne(inversedBy: 'commentaires')]

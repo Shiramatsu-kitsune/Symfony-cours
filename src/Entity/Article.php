@@ -33,7 +33,7 @@ class Article
 
     #[ORM\Column]
     private \DateTimeImmutable $publishedAt;
-
+    
     //  Relation avec User (ManyToOne)
     #[ORM\ManyToOne(inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
