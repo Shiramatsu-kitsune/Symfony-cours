@@ -6,8 +6,9 @@ controllers:
 
 home:
     path: /
-    controller: App\Controller\UserController::new
-    methods: [GET, POST]
+    controller: App\Controller\HomeController::index
+    methods: [GET]
+
 
 app_login:
     path: /login
@@ -18,6 +19,11 @@ user_index:
     path: /user
     controller: App\Controller\UserController::index
     methods: [GET]
+
+profile:
+    path: /profile
+    controller: App\Controller\HomeController::profile
+    methods: [GET, POST]
 
 user_new:
     path: /user/new

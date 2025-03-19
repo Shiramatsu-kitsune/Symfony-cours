@@ -16,6 +16,7 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+            entry_point: form_login
             form_login:
                 login_path: app_login
                 check_path: app_login
@@ -23,6 +24,16 @@ security:
             logout:
                 path: app_logout
                 target: /
+            custom_authenticator: App\Security\LoginAuthenticator
+
+
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
+                # by default, the feature is enabled by checking a checkbox in the
+                # login form, uncomment the following line to always enable it.
+                #always_remember_me: true
 
 
     role_hierarchy:
@@ -30,13 +41,12 @@ security:
 
     access_control:
 
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/logout, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/user/new, roles: IS_AUTHENTICATED_ANONYMOUSLY }  
-
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/logout, roles: PUBLIC_ACCESS }
+       
  
-        - { path: ^/user/edit, roles: ROLE_ADMIN }
-        - { path: ^/user, roles: ROLE_USER }
+        #- { path: ^/user/edit, roles: ROLE_USER }
+
 
         - { path: ^/articles$, roles: IS_AUTHENTICATED_ANONYMOUSLY } 
         - { path: ^/articles/\d+$, roles: IS_AUTHENTICATED_ANONYMOUSLY } 

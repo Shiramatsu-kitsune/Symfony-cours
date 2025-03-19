@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ asset('css/TwigStyles.css') }}">
+{% endblock %}
+
+{% block body %}
+<main>
+    <section class="slider">
+        <div class="slides">
+            <div class="slide">
+                <img src="{{ asset('images/resized_logo_353x299 V-talys.png') }}" alt="Annonce Créateur">
+                <div class="slide-text">Annonce Créateur</div>
+            </div>
+            <div class="slide">
+                <img src="{{ asset('images/entreprise.png') }}" alt="Annonce Entreprise">
+                <div class="slide-text">Annonce Entreprise</div>
+            </div>
+            <div class="slide">
+                <img src="{{ asset('images/banniere_vtuber_logo_353x299_fixed.png') }}" alt="Annonce Artiste">
+                <div class="slide-text">Annonce Artiste</div>
+            </div>
+        </div>
+        <button class="prev">&#10094;</button>
+        <button class="next">&#10095;</button>
+    </section>
+
+    <div class="content-container">
+        <img src="{{ asset('images/Amaryllis-Teste00.png') }}" alt="Amaryllis" width="204" height="582">
+        <div class="text-content">
+            <h1>Bienvenue sur VtubeNation</h1>
+            <p>Bienvenue sur VtubeNation ! Je suis Shiramatsu, créatrice de ce site.
+                <br><br>
+                Du coup, qui sommes-nous ? VtubeNation est une communauté basée sur le VtubingFr.
+                <br><br>
+                Pourquoi VtubeNation ? La communauté francophone est assez fractionnée sur plusieurs plateformes.
+                Ici, elle sera regroupée et catégorisée.
+                <br><br>
+                À qui s’adresse VtubeNation ? À tous ceux/celles qui sont intéressés par le Vtubing francophone
+                et aux Vtubers qui veulent une plateforme pour poster et centraliser leur contenu.
+                <br><br>
+                Tu es Vtuber ? Ou simplement un fan incontesté du Vtubing ? Tu te demandes s’il y a
+                une communauté du VtubingFr ? Tu es au bon endroit !
+                <br>
+                N’hésite pas à nous rejoindre !
+            </p>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    function showPopup(title, content) {
+        alert(title + ': ' + content);
+    }
+
+    const mobileMenu = document.getElementById("mobile-menu");
+    const navLinks = document.querySelector(".nav-links");
+
+    mobileMenu.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+    });
+
+    let slideIndex = 0;
+    const slides = document.querySelectorAll('.slide');
+    const prevButton = document.querySelector('.prev');
+    const nextButton = document.querySelector('.next');
+
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.style.display = i === index ? 'block' : 'none';
+        });
+    }
+
+    function nextSlide() {
+        slideIndex = (slideIndex + 1) % slides.length;
+        showSlide(slideIndex);
+    }
+
+    function prevSlide() {
+        slideIndex = (slideIndex - 1 + slides.length) % slides.length;
+        showSlide(slideIndex);
+    }
+
+    nextButton.addEventListener('click', nextSlide);
+    prevButton.addEventListener('click', prevSlide);
+
+    showSlide(slideIndex);
+    setInterval(nextSlide, 5000);
+</script>
+{% endblock %}

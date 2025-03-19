@@ -1,0 +1,291 @@
+/* Structure de base */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+    background-color: #b10f68;
+}
+
+.main {
+    flex: 1;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #c4c4c4;
+    color: white;
+}
+
+.logo img {
+    width: 100px;
+    height: 100px;
+}
+
+/* Liens de navigation */
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+
+.nav-links li {
+    position: relative;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+}
+
+/* Dropdown menu */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #c4c4c4;
+    min-width: 200px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Menu burger */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.bar {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 5px 0;
+}
+
+/* Conteneur principal pour l'image et le texte */
+.content-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Permet d'éviter le débordement */
+    gap: 20px;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 10px;
+}
+
+/* Style de l'image */
+.content-container img {
+    flex: 1;
+    max-width: 300px;
+    border-radius: 10px;
+}
+
+/* Style du texte */
+.text-content {
+    flex: 2;
+    max-width: 500px;
+    font-size: 1.2em;
+    color: #000000;
+}
+
+/* Diaporama */
+
+.slider {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.slides {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+    min-width: 100%;
+}
+
+.slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 10px;
+}
+
+/* Boutons de navigation */
+.prev, .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    border-radius: 50%;
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Footer */
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 40px;
+    background-color: #c4c4c4;
+    color: #000000;
+    flex-wrap: wrap;
+    margin-top: auto;
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 200px;
+    margin: 0 20px;
+}
+
+.footer-column h3 {
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 5px;
+}
+
+.no-style {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+.no-style:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+/* Responsive: Ajustement pour mobiles */
+@media screen and (max-width: 768px) {
+    .content-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .content-container img {
+        width: 80%;
+        max-width: 100%;
+    }
+
+    .text-content {
+        width: 90%;
+    }
+
+    .slider {
+        max-width: 100%;
+    }
+
+    .prev, .next {
+        padding: 8px;
+        font-size: 1.2rem;
+    }
+
+    .footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-column {
+        margin: 20px 0;
+    }
+
+    .menu-toggle {
+        display: flex;
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: #c4c4c4;
+        position: absolute;
+        top: 60px;
+        left: 0;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links li {
+        text-align: center;
+        padding: 15px;
+    }
+
+    /* Dropdown visible dans le menu burger */
+    .dropdown-content {
+        display: block;
+        position: static;
+        background-color: transparent;
+        box-shadow: none;
+    }
+}
+
+/* Empêcher l'image de recouvrir le menu burger */
+.content-container {
+    position: relative;
+    z-index: 1; /* S'assure que l'image reste sous la navbar */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 10px;
+}
+
+.content-container img {
+    flex: 1;
+    max-width: 300px;
+    border-radius: 10px;
+}
+
+/* S'assurer que la navbar est au-dessus */
+.navbar {
+    position: relative;
+    z-index: 10; /* Priorité plus haute que le contenu */
+}
+
+/* Empêcher le menu burger d'être recouvert */
+.menu-toggle {
+    position: relative;
+    z-index: 20; /* Doit être au-dessus de tout */
+}
