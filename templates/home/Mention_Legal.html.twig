@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mention Légale{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ asset('css/Mention-Légal.css') }}">
+{% endblock %}
+
+{% block body %}
+    <h3><strong>Éditeur du site</strong></h3>
+    <div class="content">
+        <p class="Nom">Nom : VtubeNation : Communauté Vtuber Francophone</p>
+        <p class="Adresse">Adresse : 3 rue de random, 75001 Paris</p>
+        <p class="Email">Email : contact.vtubenation@gmail.com</p>
+
+        <br>
+        <p class="Hebergement">
+            <strong>Hébergement</strong><br>
+            Le site est hébergé par : G2R formation – 102 avenue Philippe Auguste– 75011 Paris – France.<br>
+            Téléphone : 1007
+        </p>
+
+        <br>
+        <p class="pro-int">
+            <strong>Propriété intellectuelle</strong><br>
+            Le contenu du site (textes, images, logos) est protégé par le droit d’auteur. Toute reproduction sans autorisation est interdite.
+        </p>
+
+        <br>
+        <p class="donner-perso">
+            <strong>Données personnelles</strong><br>
+            Les données collectées (email, nom, IP) sont utilisées uniquement pour répondre aux demandes de contact.<br>
+            Conformément au RGPD, vous pouvez demander la suppression ou la modification de vos données en écrivant à contact.vtubenation@gmail.com.
+        </p>
+    </div>
+
+    <div style="margin-top: 20px; text-align: center;">
+        <a href="{{ path('home') }}" class="save-btn" style="text-decoration: none; background-color: #5bc0de; padding: 10px 20px; border-radius: 5px; color: white;">Retour à l'accueil</a>
+    </div>
+{% endblock %}

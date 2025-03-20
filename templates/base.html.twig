@@ -21,13 +21,18 @@
             <li><a href="{{ path('home') }}">Accueil</a></li>
             <li><a href="{{ path('poste_index') }}">Actualité</a></li>
             <li class="dropdown">
-                <a href="#" class="dropbtn">Catégorie</a>
-                <ul class="dropdown-content">
-                    <li><a href="#">Annonce Créateur contenus</a></li>
-                    <li><a href="#">Annonce Entreprise</a></li>
-                    <li><a href="#">Annonce Artiste</a></li>
-                </ul>
+                 <li class="dropdown">
+                     <a href="#" class="dropbtn">Catégorie</a>
+                    <ul class="dropdown-content">
+                <li><a href="{{ path('article_by_categorie', {'nom': 'Annonce Créateur contenus'}) }}">Annonce Créateur contenus</a></li>
+                <li><a href="{{ path('article_by_categorie', {'nom': 'Annonce Entreprise'}) }}">Annonce Entreprise</a></li>
+                <li><a href="{{ path('article_by_categorie', {'nom': 'Annonce Artiste'}) }}">Annonce Artiste</a></li>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li><a href="{{ path('article_new') }}"> Créer un article</a></li>
+                    {% endif %}
+                </ul>  
             </li>
+
             <li>{% if app.user %}
                 <a href="{{ path('profile') }}">Profil ({{ app.user.pseudonyme }})</a>
             {% else %}

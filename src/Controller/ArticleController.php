@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
+use App\Repository\CategorieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,34 +25,48 @@ class ArticleController extends AbstractController
     }
 
    
-public function new(Request $request, EntityManagerInterface $entityManager): Response
-{
-    // vérification si admin
-    $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
-    if ($request->isMethod('POST')) {
-        $titre = $request->request->get('titre');
-        $contenus = $request->request->get('contenus');
-        $image = $request->request->get('image');
-        $categorie = $request->request->get('categorie');
-        $publishedAt = new \DateTimeImmutable();
-
-        $article = new Article();
-        $article->setTitre($titre)
-            ->setContenus($contenus)
-            ->setImage($image)
-            ->setCategorie($categorie)
-            ->setPublishedAt($publishedAt)
-            ->setUpdatedAt($publishedAt);
-
-        $entityManager->persist($article);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('article_index');
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        CategorieRepository $categorieRepository
+    ): Response {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+    
+        $categories = $categorieRepository->findAll(); // ← Récupération BDD
+    
+        if ($request->isMethod('POST')) {
+            $titre = $request->request->get('titre');
+            $contenus = $request->request->get('contenus');
+            $image = $request->request->get('image');
+            $categorieNom = $request->request->get('categorie');
+            $publishedAt = new \DateTimeImmutable();
+    
+            // Cherche l’objet Categorie
+            $categorie = $categorieRepository->findOneBy(['nom' => $categorieNom]);
+    
+            if (!$categorie) {
+                throw new \Exception('Catégorie introuvable.');
+            }
+    
+            $article = new Article();
+            $article->setTitre($titre)
+                ->setContenus($contenus)
+                ->setImage($image)
+                ->setCategorie($categorie)
+                ->setPublishedAt($publishedAt)
+                ->setUpdatedAt($publishedAt);
+    
+            $entityManager->persist($article);
+            $entityManager->flush();
+    
+            return $this->redirectToRoute('article_index');
+        }
+    
+        return $this->render('article/new.html.twig', [
+            'categories' => $categories, // ← Injection dans Twig
+        ]);
     }
-
-    return $this->render('article/new.html.twig');
-}
+    
 
 
 public function edit(Request $request, Article $article, EntityManagerInterface $entityManager): Response
@@ -95,5 +110,17 @@ public function delete(Request $request, Article $article, EntityManagerInterfac
 
     return $this->redirectToRoute('article_index');
 }
+
+
+public function byCategorie(string $nom, ArticleRepository $articleRepository): Response
+{
+    $articles = $articleRepository->findBy(['categorie' => $nom]);
+
+    return $this->render('article/index.html.twig', [
+        'articles' => $articles,
+        'categorie' => $nom,
+    ]);
+}
+
 
 }

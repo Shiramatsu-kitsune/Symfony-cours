@@ -1,5 +1,4 @@
-/*Code CSS pour la page de connexion*/
-
+/* Code pour la page d'inscription */
 body {
   background-color: #b52c95;
   min-height: 100vh;
@@ -13,8 +12,8 @@ body {
   height: 400px;
   width: 400px;
   margin: 0 auto;
-  margin-top: 10px;
-  margin-bottom: 20px;
+  margin-top: 15px;
+  margin-bottom: 30px;
   padding: 20px;
   align-items: center;
   background-color:#BC4BC2;
@@ -28,7 +27,9 @@ body {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  min-height: 30vh;
+  
+ 
+  min-height: 40vh;
   justify-content: space-between;
 }
 
@@ -62,7 +63,6 @@ h2 {
   color: black;
 }
 
-
 /*responsive design*/
 
 @media screen and (max-width: 768px) {
@@ -80,8 +80,6 @@ h2 {
     box-shadow: none;
   }
 }
-
-
 
 /* Empêcher l'image de recouvrir le menu burger */
 .content-container {

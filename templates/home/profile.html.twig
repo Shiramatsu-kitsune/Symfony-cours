@@ -27,9 +27,19 @@
             <label for="password">Nouveau mot de passe (optionnel)</label>
             <input type="password" name="password" id="password" placeholder="Laissez vide pour ne pas changer">
         </div>
+    
+        {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
+    
 
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('change_password' ~ app.user.id) }}">
+    
         <button type="submit" class="save-btn">Sauvegarder</button>
     </form>
+    
 
     {% if app.user and app.user.id == user.id %}
         <form method="post" action="{{ path('user_delete', {id: user.id}) }}" onsubmit="return confirm('Confirmer la suppression ?');">

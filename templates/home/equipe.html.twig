@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notre Équipe{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ asset('css/Notre-equipes.css') }}">
+{% endblock %}
+
+{% block body %}
+    <main>
+        <section class="team">
+            <h1>Notre Équipe</h1>
+            <div class="team-members">
+                <div class="team-member">
+                    <img src="{{ asset('image/MoiPhotoProfil-Equipe.png') }}" alt="team-member" height="200px" width="200px">
+                    <h2>Shiramatsu Hizutsune</h2>
+                    <p>CEO</p>
+                </div>
+                <div class="team-member-CTO">
+                    <img src="{{ asset('image/MoiPhotoProfil-Equipe.png') }}" alt="team-member" height="200px" width="200px">
+                    <h2>Shiramatsu Hizutsune</h2>
+                    <p>CTO</p>
+                </div>
+                <div class="team-member-Designer">
+                    <img src="{{ asset('image/MoiPhotoProfil-Equipe.png') }}" alt="team-member" height="200px" width="200px">
+                    <h2>Shiramatsu Hizutsune</h2>
+                    <p>Designer</p>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Articles de la catégorie : {{ categorie.nom }}</h1>
+
+{% if articles is empty %}
+    <p>Aucun article pour cette catégorie.</p>
+{% else %}
+    <ul>
+        {% for article in articles %}
+            <li>
+                <h2>{{ article.titre }}</h2>
+                <p>{{ article.contenus|length > 100 ? article.contenus[:100] ~ '...' : article.contenus }}</p>
+                <p>Publié le {{ article.publishedAt|date('d/m/Y') }}</p>
+                <a href="#">Voir l'article</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<a href="{{ path('home') }}">← Retour à l'accueil</a>
+{% endblock %}

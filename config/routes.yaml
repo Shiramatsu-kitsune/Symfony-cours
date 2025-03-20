@@ -9,10 +9,15 @@ home:
     controller: App\Controller\HomeController::index
     methods: [GET]
 
+
+# security routes/connexion
+
 app_login:
     path: /login
     controller: App\Controller\SecurityController::login
     methods: [GET, POST]
+
+# user routes
 
 user_index:
     path: /user
@@ -43,9 +48,16 @@ user_delete:
     requirements:
         id: '\d+'
 
+# article routes
+
 article_index:
     path: /articles
     controller: App\Controller\ArticleController::index
+    methods: [GET]
+
+article_by_categorie:
+    path: /articles/categorie/{nom}
+    controller: App\Controller\ArticleController::byCategorie
     methods: [GET]
 
 article_new:
@@ -66,6 +78,8 @@ article_delete:
     methods: [POST]
     requirements:
         id: '\d+'
+
+# poste routes
 
 poste_index:
     path: /poste
@@ -92,6 +106,8 @@ poste_delete:
     controller: App\Controller\PosteController::delete
     methods: [POST]
 
+# categorie routes
+
 categorie_index:
     path: /categorie
     controller: App\Controller\CategorieController::index
@@ -101,3 +117,72 @@ categorie_show:
     path: /categorie/{id}
     controller: App\Controller\CategorieController::show
     methods: [GET]
+
+# mot de passe oublié
+
+app_forgot_password_request:
+    path: /forgot-password
+    controller: App\Controller\SecurityController::forgotPasswordRequest
+    methods: [GET, POST]
+
+app_check_email:
+    path: /check-email
+    controller: App\Controller\SecurityController::checkEmail
+    methods: [GET]
+
+app_reset_password:
+    path: /reset-password/{token}
+    controller: App\Controller\SecurityController::resetPassword
+    methods: [GET, POST]
+
+user_change_password:
+    path: /user/{id}/change-password
+    controller: App\Controller\UserController::changePassword
+    methods: [POST]
+    requirements:
+        id: '\d+'
+
+# commentaire routes
+
+commentaire_index:
+    path: /commentaires
+    controller: App\Controller\CommentaireController::index
+    methods: [GET]
+
+commentaire_new:
+    path: /commentaire/new
+    controller: App\Controller\CommentaireController::new
+    methods: [GET, POST]
+
+commentaire_show:
+    path: /commentaire/{id}
+    controller: App\Controller\CommentaireController::show
+    methods: [GET]
+    requirements:
+        id: '\d+'
+
+commentaire_edit:
+    path: /commentaire/{id}/edit
+    controller: App\Controller\CommentaireController::edit
+    methods: [GET, POST]
+    requirements:
+        id: '\d+'
+
+commentaire_delete:
+    path: /commentaire/{id}/delete
+    controller: App\Controller\CommentaireController::delete
+    methods: [POST]
+    requirements:
+        id: '\d+'
+
+# api routes
+
+api_commentaires_list:
+    path: /api/commentaires
+    controller: App\Controller\CommentaireController::list
+    methods: GET
+
+api_commentaires_create:
+    path: /api/commentaires
+    controller: App\Controller\CommentaireController::create
+    methods: POST

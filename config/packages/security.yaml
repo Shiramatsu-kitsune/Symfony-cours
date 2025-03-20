@@ -47,6 +47,7 @@ security:
  
         #- { path: ^/user/edit, roles: ROLE_USER }
 
+        # Les articles sont accessibles par tout le monde
 
         - { path: ^/articles$, roles: IS_AUTHENTICATED_ANONYMOUSLY } 
         - { path: ^/articles/\d+$, roles: IS_AUTHENTICATED_ANONYMOUSLY } 
@@ -68,3 +69,8 @@ security:
         #Catégories
         - {path: ^/categories/show, roles: ROLE_USER}
         - {path: ^/categorie/index, roles: ROLE_ADMIN}
+
+        #api
+        - { path: ^/api/commentaires, roles: PUBLIC_ACCESS, methods: [GET] }
+        - { path: ^/api/commentaires$, roles: ROLE_ADMIN, methods: [POST] }
+      

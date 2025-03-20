@@ -179,6 +179,34 @@ class UserController extends AbstractController
     
         return $this->redirectToRoute('user_index');
     }
-    
+    public function changePassword(Request $request, UserPasswordHasherInterface $passwordHasher, int $id): RedirectResponse
+{
+    $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+
+    if (!$user || $user !== $this->getUser()) {
+        throw $this->createAccessDeniedException('Accès refusé.');
+    }
+
+    $submittedToken = $request->request->get('_csrf_token');
+    if (!$this->isCsrfTokenValid('change_password' . $user->getId(), $submittedToken)) {
+        throw $this->createAccessDeniedException('Token CSRF invalide.');
+    }
+
+    $newPassword = $request->request->get('password');
+
+    if ($newPassword) {
+        $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
+        $user->setPassword($hashedPassword);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+
+        $this->addFlash('success', 'Mot de passe mis à jour avec succès.');
+    } else {
+        $this->addFlash('info', 'Aucun mot de passe saisi, modification ignorée.');
+    }
+
+    return $this->redirectToRoute('profile');
+}
 
 }
